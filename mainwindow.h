@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QRadioButton>
 #include <QCheckBox>
+#include <QtSql>
 
 namespace Ui {
 class MainWindow;

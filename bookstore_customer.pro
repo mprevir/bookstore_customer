@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT +=sql
 
 TARGET = bookstore_customer
 TEMPLATE = app
