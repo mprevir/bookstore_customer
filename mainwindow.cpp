@@ -13,9 +13,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableWidget_3->setCellWidget(0,6, new QPushButton("Delete", ui->tableWidget_3));
     ui->centralWidget->setVisible(false);
 
-    QSqlDatabase db = QSqlDatabase::addDatabase("QOCI", "qtconn");
+    if(!QSqlDatabase::isDriverAvailable("QOCI"))
+    {
+    qFatal("Driver not loaded");
+    qDebug()<<"fuck";
+    }
+
+    QSqlDatabase db = QSqlDatabase::addDatabase("QOCI");
     db.setHostName("localhost");
-    db.setDatabaseName("previrpc.com");
+    db.setDatabaseName("previrpc");
     db.setUserName("previrpc");
     db.setPassword("aaaa");
     bool ok = db.open();
