@@ -5,6 +5,7 @@
 #include <QRadioButton>
 #include <QCheckBox>
 #include <QtSql>
+//#include "login.h"
 
 namespace Ui {
 class MainWindow;
@@ -16,6 +17,8 @@ class MainWindow : public QMainWindow
     
 public:
     explicit MainWindow(QWidget *parent = 0);
+    void setUsername(QString usern);
+    void populate_database(); //no need for this, so far
     ~MainWindow();
     
 private slots:
@@ -23,6 +26,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    QString username;
 };
 
 #endif // MAINWINDOW_H

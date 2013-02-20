@@ -29,7 +29,7 @@ void MainWindow::setUsername(QString usern) {
 }
 
 void MainWindow::populate_database() {
-    QSqlQuery insert_books;
+    //no need for this, so far
 }
 
 MainWindow::~MainWindow()

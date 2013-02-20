@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
-QT +=sql
+QT +=sql\
 
 TARGET = bookstore_customer
 TEMPLATE = app
@@ -13,10 +13,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    login.cpp
+    login.cpp \
+    book.cpp
 
 HEADERS  += mainwindow.h \
-    login.h
+    login.h \
+    book.h
 
 FORMS    += mainwindow.ui \
     login.ui
