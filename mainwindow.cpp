@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "login.h"
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -11,12 +13,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableWidget_3->setCellWidget(0,6, new QPushButton("Delete", ui->tableWidget_3));
     ui->centralWidget->setVisible(false);
 
-    QSqlDatabase db = QSqlDatabase::addDatabase("QOCI","mydb");
+    QSqlDatabase db = QSqlDatabase::addDatabase("QOCI", "qtconn");
     db.setHostName("localhost");
-    db.setDatabaseName("bookstore");
-    db.setUserName("previr");
+    db.setDatabaseName("previrpc.com");
+    db.setUserName("previrpc");
     db.setPassword("aaaa");
     bool ok = db.open();
+    qDebug()<<ok;
+    qDebug()<<db.lastError();
 
     login* Login = new login(this);
     Login->addMW(this);
@@ -28,8 +32,21 @@ void MainWindow::setUsername(QString usern) {
     ui->label->setText(username);
 }
 
-void MainWindow::populate_database() {
-    QSqlQuery insert_books;
+void MainWindow::dbget_Book() {
+
+    QSqlQuery query;
+    Book tBook;
+    QString tISBN;
+    int tPublisherID;
+    QString tTitle;
+    float tPrice;
+    int tQuantity;
+
+    query.exec("SELECT title, price, quantity, ISBN, publisher_ID FROM BOOK");
+    while (query.next()) {
+        tTitle = query.value(0).toString();
+        qDebug()<<tTitle;
+    }
 }
 
 MainWindow::~MainWindow()

@@ -30,6 +30,7 @@ void login::on_pushButton_Ok_clicked()
         this->setVisible(false);
         mainW->centralWidget()->setVisible(true);
         mainW->setUsername(ui->lineEdit_login->text());
+        mainW->dbget_Book();
 
     } else ui->label_3->setVisible(true);
 }

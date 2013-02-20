@@ -5,6 +5,7 @@
 #include <QRadioButton>
 #include <QCheckBox>
 #include <QtSql>
+#include "book.h"
 //#include "login.h"
 
 namespace Ui {
@@ -17,8 +18,9 @@ class MainWindow : public QMainWindow
     
 public:
     explicit MainWindow(QWidget *parent = 0);
+    void dbget_Book();
     void setUsername(QString usern);
-    void populate_database(); //no need for this, so far
+    void populate_table(); //no need for this, so far
     ~MainWindow();
     
 private slots:
@@ -26,6 +28,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    std::vector<Book> book_vector;
     QString username;
 };
 
