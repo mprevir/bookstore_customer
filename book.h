@@ -7,7 +7,7 @@ class Book
 {
 public:
     Book();
-    Book(QString nISBN, int nPublisherID, QString nTitle, float nPrice, int nQuantity);
+    Book(QString nTitle, float nPrice, int nQuantity, QString nISBN, int nPublisherID);
 
     QString getISBN();
     int getPublisherID();

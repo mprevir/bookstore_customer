@@ -9,7 +9,7 @@ Book::Book()
     quantity = -1;
 }
 
-Book::Book(QString nISBN, int nPublisherID, QString nTitle, float nPrice, int nQuantity) {
+Book::Book(QString nTitle, float nPrice, int nQuantity, QString nISBN, int nPublisherID) {
     ISBN = nISBN;
     publisherID = nPublisherID;
     title = nTitle;
@@ -35,4 +35,16 @@ void Book::setPrice(float nPrice) {
 
 void Book::setQuantity(int nQuantity) {
     quantity = nQuantity;
+}
+
+QString Book::getTitle() {
+    return title;
+}
+
+QString Book::getISBN() {
+    return ISBN;
+}
+
+float Book::getPrice() {
+    return price;
 }

@@ -29,8 +29,9 @@ void login::on_pushButton_Ok_clicked()
     {
         this->setVisible(false);
         mainW->centralWidget()->setVisible(true);
-        mainW->setUsername(ui->lineEdit_login->text());
         mainW->dbget_Book();
+        mainW->setUsername(ui->lineEdit_login->text());
+        mainW->populate_table();
 
     } else ui->label_3->setVisible(true);
 }
