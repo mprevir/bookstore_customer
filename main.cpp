@@ -9,6 +9,8 @@ int main(int argc, char *argv[])
     loader.setFileName("qsqloci4.dll");
     loader.load();
 
+    qApp->addLibraryPath( qApp->applicationDirPath() + "/plugins");
+
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
