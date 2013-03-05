@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'login.ui'
 **
-** Created: Wed 20. Feb 19:27:42 2013
+** Created: Thu 28. Feb 11:14:20 2013
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -50,6 +50,7 @@ public:
         lineEdit_password = new QLineEdit(login);
         lineEdit_password->setObjectName(QString::fromUtf8("lineEdit_password"));
         lineEdit_password->setGeometry(QRect(140, 60, 113, 20));
+        lineEdit_password->setEchoMode(QLineEdit::Password);
         label_3 = new QLabel(login);
         label_3->setObjectName(QString::fromUtf8("label_3"));
         label_3->setGeometry(QRect(100, 90, 111, 16));
@@ -70,6 +71,8 @@ public:
         login->setWindowTitle(QApplication::translate("login", "Dialog", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("login", "Login:", 0, QApplication::UnicodeUTF8));
         label_2->setText(QApplication::translate("login", "Password:", 0, QApplication::UnicodeUTF8));
+        lineEdit_login->setText(QApplication::translate("login", "previr", 0, QApplication::UnicodeUTF8));
+        lineEdit_password->setText(QApplication::translate("login", "1111", 0, QApplication::UnicodeUTF8));
         label_3->setText(QApplication::translate("login", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"

@@ -6,6 +6,7 @@
 #include <QCheckBox>
 #include <QtSql>
 #include <QMessageBox>
+#include <QTableWidget>
 #include "book.h"
 //#include "login.h"
 
@@ -22,7 +23,10 @@ public:
     void dbget_Book();
     void setUsername(QString usern);
     void populate_table();
+    void addRowTableWidget_3();
     ~MainWindow();
+
+    QSqlDatabase db ;
     
 private slots:
 
@@ -31,10 +35,15 @@ private slots:
 
     void on_pushButton_clicked();
 
+    void on_pushButton_3_clicked();
+
 private:
     Ui::MainWindow *ui;
     std::vector<Book> book_vector;
-    void add_table_item(int x, int y, QString text) ;
+    void add_table_item(int x, int y, QString text);
+    void add_table3_item(int x, int y, QString text);
+    void add_table_item(int x, int y, QTableWidgetItem* item);
+    void add_table3_item(int x, int y, QTableWidgetItem* item);
     QString username;
 };
 

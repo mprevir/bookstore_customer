@@ -48,6 +48,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="text">
+    <string>previr</string>
+   </property>
   </widget>
   <widget class="QLineEdit" name="lineEdit_password">
    <property name="geometry">
@@ -57,6 +60,12 @@
      <width>113</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="text">
+    <string>1111</string>
+   </property>
+   <property name="echoMode">
+    <enum>QLineEdit::Password</enum>
    </property>
   </widget>
   <widget class="QLabel" name="label_3">

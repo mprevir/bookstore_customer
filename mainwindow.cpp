@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "login.h"
 #include <QDebug>
+//#include <QOCIDriver>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -9,28 +10,31 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 //    QRadioButton *purch_button = new QRadioButton("Purchase", ui->tableWidget_3);
-    ui->tableWidget_3->setCellWidget(0,5,new QCheckBox(ui->tableWidget_3));
-    ui->tableWidget_3->setCellWidget(0,6, new QPushButton("Delete", ui->tableWidget_3));
+//    ui->tableWidget_3->setCellWidget(0,5,new QCheckBox(ui->tableWidget_3));
+//    ui->tableWidget_3->setCellWidget(0,6, new QPushButton("Delete", ui->tableWidget_3));
+
     ui->centralWidget->setVisible(false);
 
     if(!QSqlDatabase::isDriverAvailable("QOCI"))
     {
     qFatal("Driver not loaded");
-    qDebug()<<"fuck";
+    qDebug()<<"oops";
     }
 
-    QSqlDatabase db = QSqlDatabase::addDatabase("QOCI");
+    db = QSqlDatabase::addDatabase("QOCI");
     db.setHostName("localhost");
     db.setDatabaseName("previrpc");
     db.setUserName("previrpc");
     db.setPassword("aaaa");
     bool ok = db.open();
+
     qDebug()<<ok;
-//    qDebug()<<db.lastError();
+    qDebug()<<db.lastError();
 
     login* Login = new login(this);
     Login->addMW(this);
     Login->show();
+
 }
 
 void MainWindow::setUsername(QString usern) {
@@ -39,7 +43,6 @@ void MainWindow::setUsername(QString usern) {
 }
 
 void MainWindow::dbget_Book() {
-
     QSqlQuery query;
     Book* tBook;
     QString tISBN;
@@ -90,19 +93,58 @@ void MainWindow::add_table_item(int x, int y, QString text) {
     ui->tableWidget->setItem(x, y, item);
 }
 
+void MainWindow::add_table3_item(int x, int y, QString text) {
+    QTableWidgetItem* item = new QTableWidgetItem(0);
+    item->setText(text);
+    ui->tableWidget_3->setItem(x, y, item);
+}
+
+void MainWindow::add_table_item(int x, int y, QTableWidgetItem *item) {
+    QTableWidgetItem* newItem = new QTableWidgetItem;
+    newItem->setText(item->text());
+    ui->tableWidget->setItem(x, y, newItem);
+}
+
+void MainWindow::add_table3_item(int x, int y, QTableWidgetItem *item) {
+    QTableWidgetItem* newItem = new QTableWidgetItem;
+    newItem->setText(item->text());
+    ui->tableWidget_3->setItem(x, y, newItem);
+}
+
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
+void MainWindow::addRowTableWidget_3()
+{
+    int curRow = ui->tableWidget_3->rowCount();
+    ui->tableWidget_3->insertRow(curRow);
+    ui->tableWidget_3->setCellWidget(curRow,4,new QCheckBox(ui->tableWidget_3));
+    ui->tableWidget_3->setCellWidget(curRow,5, new QPushButton("Delete", ui->tableWidget_3));
+}
+
 void MainWindow::on_tableWidget_cellActivated(int row, int column)
 {
     if (column!=4) return;
-        else QMessageBox::warning(0,"Adding to cart", "Under construction");
+        else
+    {
+        addRowTableWidget_3();
+        int curRow = ui->tableWidget_3->rowCount()-1;
+        int i;
+        for (i=0; i<4; i++)
+            add_table3_item(curRow, i, ui->tableWidget->item(curRow, i));
+    }
+//    QMessageBox::warning(0,"Adding to cart", "Under construction");
 
 }
 
 void MainWindow::on_pushButton_clicked()
 {
     QMessageBox::information(0, "Searching", "It's not the book you are looking for");
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    QMessageBox::information(0, "Warning", "Insufficient funds");
 }
