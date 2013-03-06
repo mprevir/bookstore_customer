@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include "login.h"
 #include <QDebug>
+#include <QSettings>
+
 //#include <QOCIDriver>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -13,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //    ui->tableWidget_3->setCellWidget(0,5,new QCheckBox(ui->tableWidget_3));
 //    ui->tableWidget_3->setCellWidget(0,6, new QPushButton("Delete", ui->tableWidget_3));
 
+    this->setFixedSize(685, 468);
     ui->centralWidget->setVisible(false);
 
     if(!QSqlDatabase::isDriverAvailable("QOCI"))
@@ -21,11 +24,15 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug()<<"oops";
     }
 
-    db = QSqlDatabase::addDatabase("QOCI");
-    db.setHostName("localhost");
-    db.setDatabaseName("previrpc");
-    db.setUserName("previrpc");
-    db.setPassword("aaaa");
+    QSettings settings( "settings.ini", QSettings::IniFormat );
+
+    settings.beginGroup( "database" );
+
+    db = QSqlDatabase::addDatabase( settings.value( "driver", "QOCI" ).toString() );
+    db.setHostName( settings.value( "hostname", "localhost" ).toString() );
+    db.setDatabaseName( settings.value( "database", "previrpc").toString() );
+    db.setUserName( settings.value( "user", "previrpc").toString() );
+    db.setPassword( settings.value( "password", "aaaa").toString() );
     bool ok = db.open();
 
     qDebug()<<ok;
@@ -119,9 +126,17 @@ MainWindow::~MainWindow()
 void MainWindow::addRowTableWidget_3()
 {
     int curRow = ui->tableWidget_3->rowCount();
+    QPushButton del_button("Delete", ui->tableWidget_3);
     ui->tableWidget_3->insertRow(curRow);
     ui->tableWidget_3->setCellWidget(curRow,4,new QCheckBox(ui->tableWidget_3));
-    ui->tableWidget_3->setCellWidget(curRow,5, new QPushButton("Delete", ui->tableWidget_3));
+    ui->tableWidget_3->setCellWidget(curRow, 5, &del_button);
+//    ui->tableWidget_3->setCellWidget(curRow,5, new QPushButton("Delete", ui->tableWidget_3));
+    QObject::connect(&del_button, SIGNAL(clicked()), ui->tableWidget_3, SLOT(on_tableWidget3_row_delete));
+}
+
+void MainWindow::on_tableWidget3_row_delete(int row)
+{
+
 }
 
 void MainWindow::on_tableWidget_cellActivated(int row, int column)
@@ -133,7 +148,7 @@ void MainWindow::on_tableWidget_cellActivated(int row, int column)
         int curRow = ui->tableWidget_3->rowCount()-1;
         int i;
         for (i=0; i<4; i++)
-            add_table3_item(curRow, i, ui->tableWidget->item(curRow, i));
+            add_table3_item(curRow, i, ui->tableWidget->item(row, i));
     }
 //    QMessageBox::warning(0,"Adding to cart", "Under construction");
 

@@ -37,6 +37,8 @@ private slots:
 
     void on_pushButton_3_clicked();
 
+    void on_tableWidget3_row_delete();
+
 private:
     Ui::MainWindow *ui;
     std::vector<Book> book_vector;

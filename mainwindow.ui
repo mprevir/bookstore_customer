@@ -13,8 +13,14 @@
     <height>468</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>685</width>
+    <height>468</height>
+   </size>
+  </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Bookstore</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QLabel" name="label">
