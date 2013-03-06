@@ -3,7 +3,7 @@
 #include "login.h"
 #include <QDebug>
 #include <QSettings>
-
+#include "usersetting.h"
 //#include <QOCIDriver>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -11,12 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-//    QRadioButton *purch_button = new QRadioButton("Purchase", ui->tableWidget_3);
-//    ui->tableWidget_3->setCellWidget(0,5,new QCheckBox(ui->tableWidget_3));
-//    ui->tableWidget_3->setCellWidget(0,6, new QPushButton("Delete", ui->tableWidget_3));
 
     this->setFixedSize(685, 468);
-    ui->centralWidget->setVisible(false);
 
     if(!QSqlDatabase::isDriverAvailable("QOCI"))
     {
@@ -28,20 +24,25 @@ MainWindow::MainWindow(QWidget *parent) :
 
     settings.beginGroup( "database" );
 
+
+    login_dialog();
     db = QSqlDatabase::addDatabase( settings.value( "driver", "QOCI" ).toString() );
     db.setHostName( settings.value( "hostname", "localhost" ).toString() );
     db.setDatabaseName( settings.value( "database", "previrpc").toString() );
     db.setUserName( settings.value( "user", "previrpc").toString() );
     db.setPassword( settings.value( "password", "aaaa").toString() );
     bool ok = db.open();
-
-    qDebug()<<ok;
     qDebug()<<db.lastError();
+}
 
+void MainWindow::login_dialog()
+{
+    if (db.isOpen()) db.close();
+    clear_all_tables();
+    ui->centralWidget->setVisible(false);
     login* Login = new login(this);
     Login->addMW(this);
     Login->show();
-
 }
 
 void MainWindow::setUsername(QString usern) {
@@ -125,21 +126,58 @@ MainWindow::~MainWindow()
 
 void MainWindow::addRowTableWidget_3()
 {
-    int curRow = ui->tableWidget_3->rowCount();
-    QPushButton del_button("Delete", ui->tableWidget_3);
+    const int curRow = ui->tableWidget_3->rowCount();
     ui->tableWidget_3->insertRow(curRow);
+    QPushButton *del_button = new QPushButton("Delete", ui->tableWidget_3);
     ui->tableWidget_3->setCellWidget(curRow,4,new QCheckBox(ui->tableWidget_3));
-    ui->tableWidget_3->setCellWidget(curRow, 5, &del_button);
-//    ui->tableWidget_3->setCellWidget(curRow,5, new QPushButton("Delete", ui->tableWidget_3));
-    QObject::connect(&del_button, SIGNAL(clicked()), ui->tableWidget_3, SLOT(on_tableWidget3_row_delete));
+    ui->tableWidget_3->setCellWidget(curRow, 5, del_button);
+    connect(del_button, SIGNAL(clicked()), this, SLOT(on_tableWidget3_row_delete()));
 }
 
-void MainWindow::on_tableWidget3_row_delete(int row)
+void MainWindow::on_tableWidget3_row_delete()
 {
-
+    ui->tableWidget_3->removeRow(ui->tableWidget_3->currentRow());
 }
 
-void MainWindow::on_tableWidget_cellActivated(int row, int column)
+
+void MainWindow::on_pushButton_clicked()
+{
+    QMessageBox::information(0, "Searching", "It's not the book you are looking for");
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    QMessageBox::information(0, "Warning", "Insufficient funds");
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    QMessageBox msgBox;
+    msgBox.setText("Delete all items from cart?");
+    msgBox.addButton(QMessageBox::Ok); msgBox.addButton(QMessageBox::Cancel);
+    int status = msgBox.exec();
+    if (status == QMessageBox::Ok)
+    {
+        tableWidget_deleteAll(ui->tableWidget_3);
+    }
+}
+
+void MainWindow::tableWidget_deleteAll(QTableWidget* tWidget)
+{
+    unsigned row_num = tWidget->rowCount();
+    for (unsigned i=0; i<row_num; i++)
+        tWidget->removeRow(0);
+}
+
+void MainWindow::clear_all_tables()
+{
+    tableWidget_deleteAll(ui->tableWidget);
+    tableWidget_deleteAll(ui->tableWidget_2);
+    tableWidget_deleteAll(ui->tableWidget_3);
+    tableWidget_deleteAll(ui->tableWidget_4);
+}
+
+void MainWindow::on_tableWidget_cellClicked(int row, int column)
 {
     if (column!=4) return;
         else
@@ -150,16 +188,16 @@ void MainWindow::on_tableWidget_cellActivated(int row, int column)
         for (i=0; i<4; i++)
             add_table3_item(curRow, i, ui->tableWidget->item(row, i));
     }
-//    QMessageBox::warning(0,"Adding to cart", "Under construction");
-
 }
 
-void MainWindow::on_pushButton_clicked()
-{
-    QMessageBox::information(0, "Searching", "It's not the book you are looking for");
-}
 
-void MainWindow::on_pushButton_3_clicked()
+void MainWindow::on_pushButton_account_clicked()
 {
-    QMessageBox::information(0, "Warning", "Insufficient funds");
+    UserSetting userSett(this);
+    userSett.exec();
+    if (userSett.get_exit_status())
+    {
+        userSett.close();
+        login_dialog();
+    } else userSett.close();
 }

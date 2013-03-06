@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QTableWidget>
 #include "book.h"
+#include "usersetting.h"
 //#include "login.h"
 
 namespace Ui {
@@ -24,20 +25,29 @@ public:
     void setUsername(QString usern);
     void populate_table();
     void addRowTableWidget_3();
+    void login_dialog();
+    void tableWidget_deleteAll(QTableWidget* tWidget);
+    void clear_all_tables();
     ~MainWindow();
 
     QSqlDatabase db ;
     
+public slots:
+
+    void on_tableWidget3_row_delete();
+
 private slots:
-
-
-    void on_tableWidget_cellActivated(int row, int column);
 
     void on_pushButton_clicked();
 
     void on_pushButton_3_clicked();
 
-    void on_tableWidget3_row_delete();
+
+    void on_pushButton_2_clicked();
+
+    void on_tableWidget_cellClicked(int row, int column);
+
+    void on_pushButton_account_clicked();
 
 private:
     Ui::MainWindow *ui;

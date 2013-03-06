@@ -368,6 +368,26 @@
      <string>Go</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton_account">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>30</y>
+      <width>171</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Profile</string>
+    </property>
+   </widget>
+   <zorder>pushButton_account</zorder>
+   <zorder>label</zorder>
+   <zorder>label_2</zorder>
+   <zorder>tabWidget</zorder>
+   <zorder>label_3</zorder>
+   <zorder>lineEdit</zorder>
+   <zorder>pushButton</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

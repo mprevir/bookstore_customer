@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Thu 21. Feb 08:33:53 2013
+** Created: Wed 6. Mar 23:39:46 2013
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -45,6 +45,7 @@ public:
     QLabel *label_3;
     QLineEdit *lineEdit;
     QPushButton *pushButton;
+    QPushButton *pushButton_account;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -52,6 +53,7 @@ public:
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
         MainWindow->setEnabled(true);
         MainWindow->resize(685, 468);
+        MainWindow->setMinimumSize(QSize(685, 468));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         label = new QLabel(centralWidget);
@@ -188,7 +190,17 @@ public:
         pushButton = new QPushButton(centralWidget);
         pushButton->setObjectName(QString::fromUtf8("pushButton"));
         pushButton->setGeometry(QRect(190, 50, 75, 23));
+        pushButton_account = new QPushButton(centralWidget);
+        pushButton_account->setObjectName(QString::fromUtf8("pushButton_account"));
+        pushButton_account->setGeometry(QRect(460, 30, 171, 23));
         MainWindow->setCentralWidget(centralWidget);
+        pushButton_account->raise();
+        label->raise();
+        label_2->raise();
+        tabWidget->raise();
+        label_3->raise();
+        lineEdit->raise();
+        pushButton->raise();
 
         retranslateUi(MainWindow);
 
@@ -200,7 +212,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0, QApplication::UnicodeUTF8));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Bookstore", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("MainWindow", "username's account", 0, QApplication::UnicodeUTF8));
         label_2->setText(QApplication::translate("MainWindow", "$0.00", 0, QApplication::UnicodeUTF8));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
@@ -254,6 +266,7 @@ public:
         tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("MainWindow", "Purchased/Rented books", 0, QApplication::UnicodeUTF8));
         label_3->setText(QApplication::translate("MainWindow", "Search the store:", 0, QApplication::UnicodeUTF8));
         pushButton->setText(QApplication::translate("MainWindow", "Go", 0, QApplication::UnicodeUTF8));
+        pushButton_account->setText(QApplication::translate("MainWindow", "Profile", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

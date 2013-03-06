@@ -19,11 +19,14 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     login.cpp \
-    book.cpp
+    book.cpp \
+    usersetting.cpp
 
 HEADERS  += mainwindow.h \
     login.h \
-    book.h
+    book.h \
+    usersetting.h
 
 FORMS    += mainwindow.ui \
-    login.ui
+    login.ui \
+    usersetting.ui
