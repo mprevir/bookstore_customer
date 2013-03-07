@@ -7,20 +7,23 @@ class Book
 {
 public:
     Book();
-    Book(QString nTitle, float nPrice, int nQuantity, QString nISBN, int nPublisherID);
+    Book(QString nAuthor, QString nTitle, float nPrice, int nQuantity, QString nISBN, int nPublisherID);
 
+    QString getAuthor();
     QString getISBN();
     int getPublisherID();
     QString getTitle();
     float getPrice();
     int getQuantity();
 
+    void setAuthor(QString nAuthor);
     void setISBN(QString nISBN);
     void setPublisherID(int nPublisherID);
     void setTitle(QString nTitle);
     void setPrice(float nPrice);
     void setQuantity(int nQuantity);
 private:
+    QString author;
     QString ISBN;
     int publisherID;
     QString title;

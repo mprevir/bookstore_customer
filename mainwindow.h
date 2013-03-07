@@ -9,6 +9,7 @@
 #include <QTableWidget>
 #include "book.h"
 #include "usersetting.h"
+#include <QSettings>
 //#include "login.h"
 
 namespace Ui {
@@ -34,7 +35,7 @@ public:
     
 public slots:
 
-    void on_tableWidget3_row_delete();
+//    void clicked_tableWidget3_row_delete(int x, int y);
 
 private slots:
 
@@ -48,6 +49,8 @@ private slots:
     void on_tableWidget_cellClicked(int row, int column);
 
     void on_pushButton_account_clicked();
+
+    void on_tableWidget_3_cellClicked(int row, int column);
 
 private:
     Ui::MainWindow *ui;

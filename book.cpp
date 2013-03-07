@@ -9,12 +9,18 @@ Book::Book()
     quantity = -1;
 }
 
-Book::Book(QString nTitle, float nPrice, int nQuantity, QString nISBN, int nPublisherID) {
+Book::Book(QString nAuthor, QString nTitle, float nPrice, int nQuantity, QString nISBN, int nPublisherID) {
+    author = nAuthor;
     ISBN = nISBN;
     publisherID = nPublisherID;
     title = nTitle;
     price = nPrice;
     quantity = nQuantity;
+}
+
+void Book::setAuthor(QString nAuthor)
+{
+    author = nAuthor;
 }
 
 void Book::setISBN(QString nISBN) {
@@ -37,14 +43,22 @@ void Book::setQuantity(int nQuantity) {
     quantity = nQuantity;
 }
 
-QString Book::getTitle() {
+QString Book::getAuthor()
+{
+    return author;
+}
+
+QString Book::getTitle()
+{
     return title;
 }
 
-QString Book::getISBN() {
+QString Book::getISBN()
+{
     return ISBN;
 }
 
-float Book::getPrice() {
+float Book::getPrice()
+{
     return price;
 }
