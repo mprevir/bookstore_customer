@@ -59,7 +59,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -136,7 +136,7 @@
      <attribute name="title">
       <string>Purchased/Rented books</string>
      </attribute>
-     <widget class="QTableView" name="tableView_Cart_2">
+     <widget class="QTableView" name="tableView_History">
       <property name="geometry">
        <rect>
         <x>0</x>

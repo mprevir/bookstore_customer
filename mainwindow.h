@@ -12,6 +12,7 @@
 #include <QSettings>
 #include <QSqlQueryModel>
 #include <QItemSelectionModel>
+#include <QSortFilterProxyModel>
 //#include "login.h"
 
 namespace Ui {
@@ -25,6 +26,7 @@ class MainWindow : public QMainWindow
     
     QSqlQueryModel* booksModel;
     QItemSelectionModel* booksItem;
+    QSortFilterProxyModel* booksProxyModel;
     QSqlQueryModel* bundlesModel;
     QItemSelectionModel* bundlesItem;
     QSqlQueryModel* cartModel;
@@ -38,7 +40,12 @@ class MainWindow : public QMainWindow
     QString databaseUser;
     QString databasePassword;
     void populate_books();
+    void add_book_to_cart(int row_index);
+    void delete_book_from_cart(int row_index);
+    int current_customer_ID;
 public:
+    void update_tableView_Cart();
+
     explicit MainWindow(QWidget *parent = 0);
     bool openDB();
     void closeDB();
@@ -47,7 +54,6 @@ public:
     void login_dialog();
     ~MainWindow();
 
-    QSqlDatabase db ;
     
 public slots:
 
@@ -63,6 +69,10 @@ private slots:
     void on_pushButton_2_clicked();
 
     void on_pushButton_account_clicked();
+
+    void on_tableView_Books_clicked(const QModelIndex &index);
+
+    void on_tableView_Cart_clicked(const QModelIndex &index);
 
 private:
     Ui::MainWindow *ui;

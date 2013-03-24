@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Wed 20. Mar 23:18:10 2013
+** Created: Sun 24. Mar 23:28:50 2013
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -37,9 +37,9 @@ public:
     QWidget *tab_2;
     QTableView *tableView_Bundles;
     QWidget *tab_3;
-    QTableView *tableView_Cart;
     QPushButton *pushButton_2;
     QPushButton *pushButton_3;
+    QTableView *tableView_Cart;
     QWidget *tab_4;
     QTableView *tableView_History;
     QLabel *label_3;
@@ -75,42 +75,25 @@ public:
         tab_2->setObjectName(QString::fromUtf8("tab_2"));
         tableView_Bundles = new QTableView(tab_2);
         tableView_Bundles->setObjectName(QString::fromUtf8("tableView_Bundles"));
-        tableView_Bundles->setGeometry(QRect(-10, 0, 511, 321));
-        tableView_Bundles->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        tableView_Bundles->setGeometry(QRect(0, 0, 641, 321));
         tabWidget->addTab(tab_2, QString());
         tab_3 = new QWidget();
         tab_3->setObjectName(QString::fromUtf8("tab_3"));
-        tableView_Cart = new QTableView(tab_3);
-        tableView_Cart->setObjectName(QString::fromUtf8("tableView_Cart"));
-        tableView_Cart->setEnabled(true);
-        tableView_Cart->setGeometry(QRect(0, 0, 641, 271));
-        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(tableView_Cart->sizePolicy().hasHeightForWidth());
-        tableView_Cart->setSizePolicy(sizePolicy);
-        tableView_Cart->setEditTriggers(QAbstractItemView::NoEditTriggers);
-        tableView_Cart->setSelectionMode(QAbstractItemView::SingleSelection);
-        tableView_Cart->setSelectionBehavior(QAbstractItemView::SelectRows);
-        tableView_Cart->horizontalHeader()->setMinimumSectionSize(90);
-        tableView_Cart->verticalHeader()->setDefaultSectionSize(0);
         pushButton_2 = new QPushButton(tab_3);
         pushButton_2->setObjectName(QString::fromUtf8("pushButton_2"));
         pushButton_2->setGeometry(QRect(300, 280, 151, 23));
         pushButton_3 = new QPushButton(tab_3);
         pushButton_3->setObjectName(QString::fromUtf8("pushButton_3"));
         pushButton_3->setGeometry(QRect(150, 280, 141, 23));
+        tableView_Cart = new QTableView(tab_3);
+        tableView_Cart->setObjectName(QString::fromUtf8("tableView_Cart"));
+        tableView_Cart->setGeometry(QRect(0, 0, 641, 271));
         tabWidget->addTab(tab_3, QString());
         tab_4 = new QWidget();
         tab_4->setObjectName(QString::fromUtf8("tab_4"));
         tableView_History = new QTableView(tab_4);
         tableView_History->setObjectName(QString::fromUtf8("tableView_History"));
-        tableView_History->setEnabled(true);
         tableView_History->setGeometry(QRect(0, 0, 641, 321));
-        sizePolicy.setHeightForWidth(tableView_History->sizePolicy().hasHeightForWidth());
-        tableView_History->setSizePolicy(sizePolicy);
-        tableView_History->setEditTriggers(QAbstractItemView::NoEditTriggers);
-        tableView_History->verticalHeader()->setDefaultSectionSize(0);
         tabWidget->addTab(tab_4, QString());
         label_3 = new QLabel(centralWidget);
         label_3->setObjectName(QString::fromUtf8("label_3"));
@@ -138,7 +121,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
