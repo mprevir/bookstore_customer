@@ -31,7 +31,7 @@ void login::on_pushButton_Ok_clicked()
         mainW->centralWidget()->setVisible(true);
         mainW->dbget_Book();
         mainW->setUsername(ui->lineEdit_login->text());
-        mainW->populate_table();
+//        mainW->populate_books();
 
     } else ui->label_3->setVisible(true);
 }

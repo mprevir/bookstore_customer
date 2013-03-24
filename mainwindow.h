@@ -10,25 +10,41 @@
 #include "book.h"
 #include "usersetting.h"
 #include <QSettings>
+#include <QSqlQueryModel>
+#include <QItemSelectionModel>
 //#include "login.h"
 
 namespace Ui {
 class MainWindow;
 }
+//TODO: recreate tableView's
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
     
+    QSqlQueryModel* booksModel;
+    QItemSelectionModel* booksItem;
+    QSqlQueryModel* bundlesModel;
+    QItemSelectionModel* bundlesItem;
+    QSqlQueryModel* cartModel;
+    QItemSelectionModel* cartItem;
+    QSqlQueryModel* historyModel;
+    QItemSelectionModel* historyItem;
+
+    QString databaseDriver;
+    QString databaseHost;
+    QString databaseName;
+    QString databaseUser;
+    QString databasePassword;
+    void populate_books();
 public:
     explicit MainWindow(QWidget *parent = 0);
+    bool openDB();
+    void closeDB();
     void dbget_Book();
     void setUsername(QString usern);
-    void populate_table();
-    void addRowTableWidget_3();
     void login_dialog();
-    void tableWidget_deleteAll(QTableWidget* tWidget);
-    void clear_all_tables();
     ~MainWindow();
 
     QSqlDatabase db ;
@@ -46,19 +62,11 @@ private slots:
 
     void on_pushButton_2_clicked();
 
-    void on_tableWidget_cellClicked(int row, int column);
-
     void on_pushButton_account_clicked();
-
-    void on_tableWidget_3_cellClicked(int row, int column);
 
 private:
     Ui::MainWindow *ui;
     std::vector<Book> book_vector;
-    void add_table_item(int x, int y, QString text);
-    void add_table3_item(int x, int y, QString text);
-    void add_table_item(int x, int y, QTableWidgetItem* item);
-    void add_table3_item(int x, int y, QTableWidgetItem* item);
     QString username;
 };
 
