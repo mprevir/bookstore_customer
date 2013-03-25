@@ -159,7 +159,33 @@ void MainWindow::on_pushButton_clicked()
 //    qDebug() << "EXEC: " << testInsert.exec() << testInsert.lastError();
 //    qDebug() << "LID: " << testInsert.lastInsertId();
 //    qDebug() << "Commit: " << QSqlDatabase::database().commit();
-    QMessageBox::information(0, "Searching", "It's not the book you are looking for");
+//    QMessageBox::information(0, "Searching", "It's not the book you are looking for");
+    openDB();
+    QSqlQuery query;
+    query.prepare("select title, new_name, price, ISBN, 'Add to cart' from "
+                  "( "
+                    "select row_number() over(order by title) NUM,  title, new_name, price, ISBN, 'Add to cart' from "
+                    "( "
+                        "select title, wm_concat(a.name) as new_name, price, b.ISBN, 'Add to cart' "
+                        "from BOOK b INNER JOIN BOOK_S_AUTHOR ba on b.ISBN = ba.ISBN INNER JOIN AUTHOR a on ba.author_id = a.author_id "
+                        "where (b.title LIKE :search1) or (a.name LIKE :search2) or (b.isbn LIKE :search3) "
+                        "group by title, price, b.ISBN "
+                     ") asdf "
+                  ") foo where Num>:lowvalue and Num<:highvalue");
+    QString searchCriteria(ui->lineEdit->text());
+    searchCriteria = '%' + searchCriteria + '%';
+    qDebug()<<"What to search?: "<<searchCriteria;
+    query.bindValue(":search1", searchCriteria);
+    query.bindValue(":search2", searchCriteria);
+    query.bindValue(":search3", searchCriteria);
+    query.bindValue(":lowvalue", 0);
+    query.bindValue(":highvalue", 10);
+    qDebug()<<"search query: "<<query.exec();
+    qDebug()<<query.lastError();
+    booksModel->setQuery(query);
+    qDebug()<<"rows count: "<<booksModel->rowCount();
+
+    closeDB();
 }
 
 void MainWindow::on_pushButton_3_clicked()
