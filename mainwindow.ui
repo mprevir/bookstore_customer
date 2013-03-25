@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>685</width>
-    <height>468</height>
+    <height>492</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -55,11 +55,11 @@
       <x>20</x>
       <y>110</y>
       <width>641</width>
-      <height>341</height>
+      <height>371</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -73,6 +73,32 @@
         <width>641</width>
         <height>321</height>
        </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_Prev">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>320</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&lt;&lt;</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_Next">
+      <property name="geometry">
+       <rect>
+        <x>560</x>
+        <y>320</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&gt;&gt;</string>
       </property>
      </widget>
     </widget>

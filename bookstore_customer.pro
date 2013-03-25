@@ -20,13 +20,16 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     login.cpp \
     book.cpp \
-    usersetting.cpp
+    usersetting.cpp \
+    registerdialog.cpp
 
 HEADERS  += mainwindow.h \
     login.h \
     book.h \
-    usersetting.h
+    usersetting.h \
+    registerdialog.h
 
 FORMS    += mainwindow.ui \
     login.ui \
-    usersetting.ui
+    usersetting.ui \
+    registerdialog.ui

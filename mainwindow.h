@@ -46,6 +46,8 @@ class MainWindow : public QMainWindow
 public:
     void update_tableView_Cart();
 
+    void setCurrent_customer_ID(int ID) {current_customer_ID = ID;}
+    int getCurrent_customer_ID() {return current_customer_ID;}
     explicit MainWindow(QWidget *parent = 0);
     bool openDB();
     void closeDB();

@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableView_Books->setModel(booksModel);
     ui->tableView_Books->setSelectionModel(booksItem);
     ui->tableView_Cart->setModel(cartModel);
-    this->setFixedSize(685, 468);
+    this->setFixedSize(685, 492);
 
     current_customer_ID = 1;
     if(!QSqlDatabase::isDriverAvailable("QOCI"))
@@ -76,9 +76,27 @@ void MainWindow::dbget_Book() {
     qDebug()<<"database is opened - "<<openDB();
     qDebug()<<QSqlDatabase::database().lastError();
     QSqlQuery query;
-    query.prepare("SELECT title, name, price, b.ISBN, 'Add to cart' FROM BOOK b INNER JOIN BOOK_S_AUTHOR ba on b.ISBN = ba.ISBN INNER JOIN AUTHOR a on ba.author_id = a.author_id");
+//select
+//    query.prepare("SELECT title, name, price, b.ISBN, 'Add to cart' FROM BOOK b INNER JOIN BOOK_S_AUTHOR ba on b.ISBN = ba.ISBN INNER JOIN AUTHOR a on ba.author_id = a.author_id");
+//select+concat
+//    query.prepare("select title, wm_concat(a.name), price, b.ISBN, 'Add to cart' "
+//                  "from BOOK b INNER JOIN BOOK_S_AUTHOR ba on b.ISBN = ba.ISBN INNER JOIN AUTHOR a on ba.author_id = a.author_id group by title, price, b.ISBN");
 
+//select+concat+from lowvalue to highvalue
+    query.prepare("select title, new_name, price, ISBN, 'Add to cart' from"
+                  "("
+                    "select row_number() over(order by title) NUM,  title, new_name, price, ISBN, 'Add to cart' from"
+                    "("
+                        "select title, wm_concat(a.name) as new_name, price, b.ISBN, 'Add to cart'"
+                        "from BOOK b INNER JOIN BOOK_S_AUTHOR ba on b.ISBN = ba.ISBN INNER JOIN AUTHOR a on ba.author_id = a.author_id group by title, price, b.ISBN"
+                        ") asdf"
+                  ") foo where Num>:lowvalue and Num<:highvalue");
+
+    query.bindValue(":lowvalue", 0);
+    query.bindValue(":highvalue", 10);
     bool qOk = query.exec();
+    qDebug()<<"main Query - "<<qOk;
+    qDebug()<<"Last error"<< query.lastError();
     booksModel->setQuery(query);
     booksModel->setHeaderData( 0, Qt::Horizontal, QObject::tr("Title") );
     booksModel->setHeaderData( 1, Qt::Horizontal, QObject::tr("Author") );
@@ -200,10 +218,11 @@ void MainWindow::update_tableView_Cart()
 {
     openDB();
     QSqlQuery query;
-    query.prepare("select title, author.name, isbn, price, 'Delete' "
+    query.prepare("select title, wm_concat(author.name), isbn, price, 'Delete' "
                   "from cart join book on cart.isbn = book.isbn "
                     "join book_s_author ba on  ba.isbn = book.isbn "
-                        "join author on ba.author_ID = author.AUTHOR_ID");
+                        "join author on ba.author_ID = author.AUTHOR_ID "
+                  "group by title, isbn, price");
     qDebug()<<"TableView updated: "<<query.exec();
     qDebug()<<query.lastError();
     cartModel->setQuery(query);

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Sun 24. Mar 23:28:50 2013
+** Created: Mon 25. Mar 17:39:48 2013
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -34,6 +34,8 @@ public:
     QTabWidget *tabWidget;
     QWidget *tab;
     QTableView *tableView_Books;
+    QPushButton *pushButton_Prev;
+    QPushButton *pushButton_Next;
     QWidget *tab_2;
     QTableView *tableView_Bundles;
     QWidget *tab_3;
@@ -52,7 +54,7 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
         MainWindow->setEnabled(true);
-        MainWindow->resize(685, 468);
+        MainWindow->resize(685, 492);
         MainWindow->setMinimumSize(QSize(685, 468));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
@@ -64,12 +66,18 @@ public:
         label_2->setGeometry(QRect(580, 10, 46, 21));
         tabWidget = new QTabWidget(centralWidget);
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
-        tabWidget->setGeometry(QRect(20, 110, 641, 341));
+        tabWidget->setGeometry(QRect(20, 110, 641, 371));
         tab = new QWidget();
         tab->setObjectName(QString::fromUtf8("tab"));
         tableView_Books = new QTableView(tab);
         tableView_Books->setObjectName(QString::fromUtf8("tableView_Books"));
         tableView_Books->setGeometry(QRect(0, 0, 641, 321));
+        pushButton_Prev = new QPushButton(tab);
+        pushButton_Prev->setObjectName(QString::fromUtf8("pushButton_Prev"));
+        pushButton_Prev->setGeometry(QRect(0, 320, 75, 23));
+        pushButton_Next = new QPushButton(tab);
+        pushButton_Next->setObjectName(QString::fromUtf8("pushButton_Next"));
+        pushButton_Next->setGeometry(QRect(560, 320, 75, 23));
         tabWidget->addTab(tab, QString());
         tab_2 = new QWidget();
         tab_2->setObjectName(QString::fromUtf8("tab_2"));
@@ -121,7 +129,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -132,6 +140,8 @@ public:
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Bookstore", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("MainWindow", "username's account", 0, QApplication::UnicodeUTF8));
         label_2->setText(QApplication::translate("MainWindow", "$0.00", 0, QApplication::UnicodeUTF8));
+        pushButton_Prev->setText(QApplication::translate("MainWindow", "<<", 0, QApplication::UnicodeUTF8));
+        pushButton_Next->setText(QApplication::translate("MainWindow", ">>", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "Books", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "Bundles", 0, QApplication::UnicodeUTF8));
         pushButton_2->setText(QApplication::translate("MainWindow", "Clear Cart", 0, QApplication::UnicodeUTF8));
