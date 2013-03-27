@@ -34,17 +34,17 @@ MainWindow::MainWindow(QWidget *parent) :
     QSettings settings ( "settings.ini", QSettings::IniFormat );
 
     settings.beginGroup( "database" );
-/*
+
     databaseDriver = settings.value( "driver", "QOCI" ).toString();
     databaseHost = settings.value( "hostname", "localhost" ).toString();
     databaseName = settings.value( "database", "orcl").toString();
     databaseUser = settings.value( "user", "system").toString();
-    databasePassword = settings.value( "password", "orcl").toString();*/
-    databaseDriver = settings.value( "driver" ).toString();
+    databasePassword = settings.value( "password", "orcl").toString();
+    /*databaseDriver = settings.value( "driver" ).toString();
     databaseHost = settings.value( "hostname" ).toString();
     databaseName = settings.value( "database").toString();
     databaseUser = settings.value( "user").toString();
-    databasePassword = settings.value( "password").toString();
+    databasePassword = settings.value( "password").toString();*/
 
     qDebug()<<"\nDriver"<<databaseDriver;
     qDebug()<<"Host"<<databaseHost;
