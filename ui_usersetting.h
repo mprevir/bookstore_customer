@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'usersetting.ui'
 **
-** Created: Wed 6. Mar 23:42:26 2013
+** Created: Wed 27. Mar 21:48:32 2013
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -26,7 +26,7 @@ class Ui_UserSetting
 public:
     QLabel *label_accountName;
     QLabel *label;
-    QLabel *label_2;
+    QLabel *label_Wallet;
     QPushButton *pushButton;
     QPushButton *pushButton_2;
     QPushButton *logoutButton;
@@ -46,9 +46,9 @@ public:
         label = new QLabel(UserSetting);
         label->setObjectName(QString::fromUtf8("label"));
         label->setGeometry(QRect(20, 95, 46, 13));
-        label_2 = new QLabel(UserSetting);
-        label_2->setObjectName(QString::fromUtf8("label_2"));
-        label_2->setGeometry(QRect(70, 95, 46, 13));
+        label_Wallet = new QLabel(UserSetting);
+        label_Wallet->setObjectName(QString::fromUtf8("label_Wallet"));
+        label_Wallet->setGeometry(QRect(70, 95, 46, 13));
         pushButton = new QPushButton(UserSetting);
         pushButton->setObjectName(QString::fromUtf8("pushButton"));
         pushButton->setGeometry(QRect(150, 90, 75, 23));
@@ -76,7 +76,7 @@ public:
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">TextLabel</p></body></html>", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("UserSetting", "Wallet:", 0, QApplication::UnicodeUTF8));
-        label_2->setText(QApplication::translate("UserSetting", "0.00$", 0, QApplication::UnicodeUTF8));
+        label_Wallet->setText(QString());
         pushButton->setText(QApplication::translate("UserSetting", "Add funds", 0, QApplication::UnicodeUTF8));
         pushButton_2->setText(QApplication::translate("UserSetting", "Change Password", 0, QApplication::UnicodeUTF8));
         logoutButton->setText(QApplication::translate("UserSetting", "LogOut", 0, QApplication::UnicodeUTF8));

@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setFixedSize(685, 492);
 
     current_customer_ID = 1;
+    current_book_page = 0;
     if(!QSqlDatabase::isDriverAvailable("QOCI"))
     {
     qFatal("Driver not loaded");
@@ -33,12 +34,23 @@ MainWindow::MainWindow(QWidget *parent) :
     QSettings settings ( "settings.ini", QSettings::IniFormat );
 
     settings.beginGroup( "database" );
-
+/*
     databaseDriver = settings.value( "driver", "QOCI" ).toString();
     databaseHost = settings.value( "hostname", "localhost" ).toString();
-    databaseName = settings.value( "database", "previrpc").toString();
-    databaseUser = settings.value( "user", "previrpc").toString();
-    databasePassword = settings.value( "password", "aaaa").toString();
+    databaseName = settings.value( "database", "orcl").toString();
+    databaseUser = settings.value( "user", "system").toString();
+    databasePassword = settings.value( "password", "orcl").toString();*/
+    databaseDriver = settings.value( "driver" ).toString();
+    databaseHost = settings.value( "hostname" ).toString();
+    databaseName = settings.value( "database").toString();
+    databaseUser = settings.value( "user").toString();
+    databasePassword = settings.value( "password").toString();
+
+    qDebug()<<"\nDriver"<<databaseDriver;
+    qDebug()<<"Host"<<databaseHost;
+    qDebug()<<"Name"<<databaseName;
+    qDebug()<<"User"<<databaseUser;
+    qDebug()<<"Password"<<databasePassword<<"\n";
 
     login_dialog();
     update_tableView_Cart();
@@ -147,7 +159,7 @@ MainWindow::~MainWindow()
 }
 
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_pushButton_clicked()   //search
 {
 //    QSqlQuery testInsert;
 //    qDebug() << "Prepare: " << testInsert.prepare( "insert into author( author_id, name ) values"
@@ -168,7 +180,7 @@ void MainWindow::on_pushButton_clicked()
                     "( "
                         "select title, wm_concat(a.name) as new_name, price, b.ISBN, 'Add to cart' "
                         "from BOOK b INNER JOIN BOOK_S_AUTHOR ba on b.ISBN = ba.ISBN INNER JOIN AUTHOR a on ba.author_id = a.author_id "
-                        "where (b.title LIKE :search1) or (a.name LIKE :search2) or (b.isbn LIKE :search3) "
+                        "where (lower(b.title) LIKE lower(:search1)) or (lower(a.name) LIKE lower(:search2)) or (lower(b.isbn) LIKE lower(:search3)) "
                         "group by title, price, b.ISBN "
                      ") asdf "
                   ") foo where Num>:lowvalue and Num<:highvalue");
@@ -188,12 +200,12 @@ void MainWindow::on_pushButton_clicked()
     closeDB();
 }
 
-void MainWindow::on_pushButton_3_clicked()
+void MainWindow::on_pushButton_3_clicked()   //buy
 {
     QMessageBox::information(0, "Warning", "Insufficient funds");
 }
 
-void MainWindow::on_pushButton_2_clicked()
+void MainWindow::on_pushButton_2_clicked()  //clear cart
 {
     QMessageBox msgBox;
     msgBox.setText("Delete all items from cart?");
@@ -206,13 +218,15 @@ void MainWindow::on_pushButton_2_clicked()
 
 void MainWindow::on_pushButton_account_clicked()
 {
-    UserSetting userSett(this);
+    UserSetting userSett(this, current_customer_ID);
+//    userSett.set_current_customer_id(current_customer_ID);
+    qDebug()<<"before Current ID: "<<userSett.get_current_customer_id();
     userSett.exec();
-    if (userSett.get_exit_status())
+    userSett.close();
+    if (!userSett.get_exit_status())
     {
-        userSett.close();
         login_dialog();
-    } else userSett.close();
+    }
 }
 
 void MainWindow::add_book_to_cart(int row_index)
@@ -251,7 +265,13 @@ void MainWindow::update_tableView_Cart()
                   "group by title, isbn, price");
     qDebug()<<"TableView updated: "<<query.exec();
     qDebug()<<query.lastError();
+
     cartModel->setQuery(query);
+    cartModel->setHeaderData( 0, Qt::Horizontal, QObject::tr("Title") );
+    cartModel->setHeaderData( 1, Qt::Horizontal, QObject::tr("Author") );
+    cartModel->setHeaderData( 2, Qt::Horizontal, QObject::tr("ISBN") );
+    cartModel->setHeaderData( 3, Qt::Horizontal, QObject::tr("Price") );
+    cartModel->setHeaderData( 4, Qt::Horizontal, QObject::tr(""));
     closeDB();
 }
 

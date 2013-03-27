@@ -43,6 +43,7 @@ class MainWindow : public QMainWindow
     void add_book_to_cart(int row_index);
     void delete_book_from_cart(int row_index);
     int current_customer_ID;
+    int current_book_page;
 public:
     void update_tableView_Cart();
 
