@@ -12,15 +12,18 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
 
     booksModel( new QSqlQueryModel( this ) ),
+    bundlesModel(new QSqlQueryModel(this)),
     cartModel(new QSqlQueryModel(this)),
+    historyModel(new QSqlQueryModel(this)),
     booksItem( new QItemSelectionModel( booksModel, this ) ),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
     ui->tableView_Books->setModel(booksModel);
-    ui->tableView_Books->setSelectionModel(booksItem);
+    ui->tableView_Bundles->setModel(bundlesModel);
     ui->tableView_Cart->setModel(cartModel);
+    ui->tableView_History->setModel(historyModel);
     this->setFixedSize(685, 492);
 
     current_customer_ID = 1;
@@ -40,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
     databaseName = settings.value( "database", "orcl").toString();
     databaseUser = settings.value( "user", "system").toString();
     databasePassword = settings.value( "password", "orcl").toString();
+    databasePort = settings.value("port", 1521).toUInt();
     /*databaseDriver = settings.value( "driver" ).toString();
     databaseHost = settings.value( "hostname" ).toString();
     databaseName = settings.value( "database").toString();
@@ -50,10 +54,20 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug()<<"Host"<<databaseHost;
     qDebug()<<"Name"<<databaseName;
     qDebug()<<"User"<<databaseUser;
-    qDebug()<<"Password"<<databasePassword<<"\n";
+    qDebug()<<"Password"<<databasePassword;
+    qDebug()<<"Port"<<databasePort<<"\n";
+
+    QSqlDatabase db = QSqlDatabase::addDatabase( databaseDriver );
+    db.setHostName( databaseHost );
+    db.setDatabaseName(databaseName );
+    db.setUserName( databaseUser );
+    db.setPassword( databasePassword );
+    db.setPort(databasePort);
 
     login_dialog();
+    update_tableView_Bundles();
     update_tableView_Cart();
+    update_tableView_History();
 }
 
 void MainWindow::login_dialog()
@@ -75,16 +89,6 @@ void MainWindow::setUsername(QString usern) {
 }
 
 void MainWindow::dbget_Book() {
-    /*Book* tBook;
-    QString tAuthor;
-    QString tISBN;
-    int tPublisherID;
-    QString tTitle;
-    float tPrice;
-    int tQuantity;*/
-
-
-
     qDebug()<<"database is opened - "<<openDB();
     qDebug()<<QSqlDatabase::database().lastError();
     QSqlQuery query;
@@ -127,30 +131,15 @@ bool MainWindow::openDB()
 //        qDebug()<<"database is already opened";
         return true;
     }
-    QSqlDatabase db = QSqlDatabase::addDatabase( databaseDriver );
-    db.setHostName( databaseHost );
-    db.setDatabaseName(databaseName );
-    db.setUserName( databaseUser );
-    db.setPassword( databasePassword );
-    return db.open();
+
+    return QSqlDatabase::database().open();
 }
 
 void MainWindow::closeDB()
 {
    QSqlDatabase::database().close();
-//     qDebug()<<"database is opened (but it shouldn't be - )"<<QSqlDatabase::database().isOpen();
 }
 
-void MainWindow::populate_books()
-{
-    /*std::vector<Book>::iterator tBook;
-    unsigned i;
-    for (tBook = book_vector.begin(), i=0; tBook != book_vector.end() || i<10; tBook++, i++)
-    {
-        qDebug()<<tBook->getTitle();
-        booksModel->
-    }*/
-}
 
 
 MainWindow::~MainWindow()
@@ -161,17 +150,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()   //search
 {
-//    QSqlQuery testInsert;
-//    qDebug() << "Prepare: " << testInsert.prepare( "insert into author( author_id, name ) values"
-//                                                   " ( sequence.nextval, :name )");
-
-//    testInsert.bindValue( ":name", "ASFDGHDGJKSF" );
-
-//    qDebug() << "tr: " << QSqlDatabase::database().transaction();
-//    qDebug() << "EXEC: " << testInsert.exec() << testInsert.lastError();
-//    qDebug() << "LID: " << testInsert.lastInsertId();
-//    qDebug() << "Commit: " << QSqlDatabase::database().commit();
-//    QMessageBox::information(0, "Searching", "It's not the book you are looking for");
     openDB();
     QSqlQuery query;
     query.prepare("select title, new_name, price, ISBN, 'Add to cart' from "
@@ -202,7 +180,42 @@ void MainWindow::on_pushButton_clicked()   //search
 
 void MainWindow::on_pushButton_3_clicked()   //buy
 {
-    QMessageBox::information(0, "Warning", "Insufficient funds");
+    openDB();
+    QSqlQuery query;
+    query.prepare("select wallet from customer where customer_id = :id");
+    query.bindValue(":id", current_customer_ID);
+    qDebug()<<"purchase |wallet| query exec: "<<query.exec();
+    qDebug()<<query.lastError();
+    query.next();
+    double wallet = query.value(0).toDouble();
+    QSqlQuery query1;
+    query1.prepare("select sum(price) from cart");
+    query1.exec();
+    query1.next();
+    double price = query1.value(0).toDouble();
+    closeDB();
+    if (wallet < price)
+        QMessageBox::information(0, "Warning", "Insufficient funds");
+    else
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Buy all books in the cart?");
+        msgBox.addButton(QMessageBox::Ok); msgBox.addButton(QMessageBox::Cancel);
+        int status = msgBox.exec();
+        if (status == QMessageBox::Ok)
+        {
+            openDB();
+            QSqlQuery queryBuy;
+            queryBuy.prepare("call BUY_CART(:cust_id)");
+            queryBuy.bindValue(":cust_id", current_customer_ID);
+            qDebug()<<"Buy cart: "<<queryBuy.exec();
+            qDebug()<<queryBuy.lastError();
+            closeDB();
+            update_wallet();
+            clear_Cart();
+            update_tableView_History();
+        }
+    }
 }
 
 void MainWindow::on_pushButton_2_clicked()  //clear cart
@@ -211,7 +224,11 @@ void MainWindow::on_pushButton_2_clicked()  //clear cart
     msgBox.setText("Delete all items from cart?");
     msgBox.addButton(QMessageBox::Ok); msgBox.addButton(QMessageBox::Cancel);
     int status = msgBox.exec();
-
+    qDebug()<<"status = "<<status;
+    if (status == QMessageBox::Ok)
+    {
+        clear_Cart();
+    }
 }
 
 
@@ -223,17 +240,29 @@ void MainWindow::on_pushButton_account_clicked()
     qDebug()<<"before Current ID: "<<userSett.get_current_customer_id();
     userSett.exec();
     userSett.close();
+    update_wallet();
     if (!userSett.get_exit_status())
     {
         login_dialog();
     }
 }
 
+void MainWindow::clear_Cart()
+{
+    openDB();
+    QSqlQuery query;
+    query.prepare("delete from cart");
+    qDebug()<<"Clear cart: "<<query.exec();
+    qDebug()<<query.lastError();
+    update_tableView_Cart();
+    closeDB();
+}
+
 void MainWindow::add_book_to_cart(int row_index)
 {
     openDB();
     QSqlQuery query;
-    query.prepare("call ADD_BOOK_TO_CART(:isbn, :customerID, null)");
+    query.prepare("call ADD_BOOK_TO_CART(:isbn, :customerID, null, null)");
     QModelIndex index = booksModel->index(row_index, 3);
     QString value3 = booksModel->itemData(index)[0].toString();
     qDebug()<<"ISBN: "<<value3;
@@ -254,18 +283,61 @@ void MainWindow::on_tableView_Books_clicked(const QModelIndex &index)
         add_book_to_cart(index.row());
 }
 
+void MainWindow::update_tableView_Bundles()
+{
+    openDB();
+    QSqlQuery query;
+    query.prepare("select name, ttl, trunc(prc,2), 'Add to cart' "
+                  "from "
+                  "( "
+                    "select bundle.name, wm_concat(book.title) ttl, bundle.bundle_id "
+                    "from bundle, bundledbook, book "
+                    "where book.isbn = bundledbook.isbn "
+                    "group by bundle.name, bundle.bundle_id "
+                  ") asd1 "
+                  "join "
+                  "( "
+                    "select sum((1-discount)*price) prc, bundle.bundle_id "
+                    "from bundle, bundledbook, book "
+                    "where book.isbn = bundledbook.isbn "
+                    "group by bundle.bundle_id "
+                  ") asd2 "
+                  "on asd1.bundle_id = asd2.bundle_id");
+    qDebug()<<"bundles update: "<<query.exec();
+    qDebug()<<query.lastError();
+    bundlesModel->setQuery(query);
+    qDebug()<<"rows found: "<<bundlesModel->rowCount()<<"\n";
+    bundlesModel->setHeaderData( 0, Qt::Horizontal, QObject::tr("Bundle"));
+    bundlesModel->setHeaderData( 1, Qt::Horizontal, QObject::tr("Books in bundle"));
+    bundlesModel->setHeaderData( 2, Qt::Horizontal, QObject::tr("Price"));
+    bundlesModel->setHeaderData( 3, Qt::Horizontal, QObject::tr(""));
+    closeDB();
+}
+
 void MainWindow::update_tableView_Cart()
 {
     openDB();
     QSqlQuery query;
-    query.prepare("select title, wm_concat(author.name), isbn, price, 'Delete' "
+//doesn't involve discounts:
+
+    query.prepare("select title, wm_concat(author.name), isbn, cart.price, 'Delete' "
                   "from cart join book on cart.isbn = book.isbn "
                     "join book_s_author ba on  ba.isbn = book.isbn "
                         "join author on ba.author_ID = author.AUTHOR_ID "
-                  "group by title, isbn, price");
+                  "group by title, isbn, cart.price");
+
+/*    query.prepare("select asd1.title, asd1.auth_name, asd1.isbn, nvl(asd2.discount, asd1.price), 'Delete' "
+                  "from (select title, wm_concat(author.name) auth_name, book.isbn, price, cart.bundle_id "
+                                  "from cart join book on cart.isbn = book.isbn "
+                                    "join book_s_author ba on  ba.isbn = book.isbn "
+                                        "join author on ba.author_ID = author.AUTHOR_ID "
+                                  "group by title, book.isbn, price, cart.bundle_id) asd1 "
+                "left outer join "
+                  "(select discount, isbn, bundle_id "
+                      "from bundledbook) asd2 "
+                "on asd1.isbn = asd2.isbn and asd1.bundle_id = asd2.bundle_id");*/
     qDebug()<<"TableView updated: "<<query.exec();
     qDebug()<<query.lastError();
-
     cartModel->setQuery(query);
     cartModel->setHeaderData( 0, Qt::Horizontal, QObject::tr("Title") );
     cartModel->setHeaderData( 1, Qt::Horizontal, QObject::tr("Author") );
@@ -273,6 +345,42 @@ void MainWindow::update_tableView_Cart()
     cartModel->setHeaderData( 3, Qt::Horizontal, QObject::tr("Price") );
     cartModel->setHeaderData( 4, Qt::Horizontal, QObject::tr(""));
     closeDB();
+}
+
+void MainWindow::update_tableView_History()
+{
+    openDB();
+    QSqlQuery query;
+    query.prepare("select title, wm_concat(author.name), h.isbn, h.price, to_char(h.purchasing_date, 'DD-MON-YYYY HH24:MI') "
+                  "from book join history_of_purchasing h ON book.isbn = h.isbn "
+                    "join book_s_author on book.isbn = book_s_author.isbn "
+                      "join author on author.author_id = book_s_author.author_id "
+                  "where h.customer_id = :cust_id "
+                  "group by title, h.isbn, h.price, h.purchasing_date");
+    query.bindValue(":cust_id", current_customer_ID);
+    qDebug()<<"update HoP: "<<query.exec();
+    qDebug()<<query.lastError();
+    historyModel->setQuery(query);
+    historyModel->setHeaderData( 0, Qt::Horizontal, QObject::tr("Title") );
+    historyModel->setHeaderData( 1, Qt::Horizontal, QObject::tr("Author") );
+    historyModel->setHeaderData( 2, Qt::Horizontal, QObject::tr("ISBN") );
+    historyModel->setHeaderData( 3, Qt::Horizontal, QObject::tr("Price") );
+    historyModel->setHeaderData( 4, Qt::Horizontal, QObject::tr("Purchase date"));
+    closeDB();
+}
+
+void MainWindow::update_wallet()
+{
+    openDB();
+    QSqlQuery query;
+    query.prepare("select wallet from customer where customer_id = :id");
+    query.bindValue(":id", current_customer_ID);
+    qDebug()<<"update_wallet query exec: "<<query.exec();
+    qDebug()<<query.lastError();
+    query.next();
+    double wallet = query.value(0).toDouble();
+    closeDB();
+    ui->label_2->setText(QString::number(wallet, 'f', 2) + '$');
 }
 
 void MainWindow::delete_book_from_cart(int row_index)

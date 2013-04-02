@@ -19,13 +19,11 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     login.cpp \
-    book.cpp \
     usersetting.cpp \
     registerdialog.cpp
 
 HEADERS  += mainwindow.h \
     login.h \
-    book.h \
     usersetting.h \
     registerdialog.h
 

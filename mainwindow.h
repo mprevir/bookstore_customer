@@ -7,7 +7,6 @@
 #include <QtSql>
 #include <QMessageBox>
 #include <QTableWidget>
-#include "book.h"
 #include "usersetting.h"
 #include <QSettings>
 #include <QSqlQueryModel>
@@ -39,13 +38,18 @@ class MainWindow : public QMainWindow
     QString databaseName;
     QString databaseUser;
     QString databasePassword;
+    unsigned databasePort;
     void populate_books();
     void add_book_to_cart(int row_index);
     void delete_book_from_cart(int row_index);
+    void clear_Cart();
     int current_customer_ID;
     int current_book_page;
 public:
+    void update_tableView_Bundles();
     void update_tableView_Cart();
+    void update_tableView_History();
+    void update_wallet();
 
     void setCurrent_customer_ID(int ID) {current_customer_ID = ID;}
     int getCurrent_customer_ID() {return current_customer_ID;}
@@ -64,12 +68,12 @@ public slots:
 
 private slots:
 
-    void on_pushButton_clicked();
+    void on_pushButton_clicked();  //search
 
-    void on_pushButton_3_clicked();
+    void on_pushButton_3_clicked(); //purchase
 
 
-    void on_pushButton_2_clicked();
+    void on_pushButton_2_clicked();  //clear cart
 
     void on_pushButton_account_clicked();
 
@@ -79,7 +83,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    std::vector<Book> book_vector;
     QString username;
 };
 

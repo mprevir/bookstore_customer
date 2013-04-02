@@ -24,14 +24,20 @@ void login::addMW(MainWindow *MW) {
     this->mainW = MW;
 }
 
-
+#include <QSqlResult>
 void login::on_pushButton_Ok_clicked()
 {
     const QString entered_login(ui->lineEdit_login->text());
     const QString entered_password(ui->lineEdit_password->text());
     QString correct_password;
 
-    mainW->openDB();
+    bool connection_established = mainW->openDB();
+    if (!connection_established)
+    {
+        QMessageBox::information(0, "Connection problem", "Cannot connect to server.\n"
+                                 "Check your connection settings (settings.ini - located in program folder)");
+        return;
+    }
     QSqlQuery query;
     query.prepare("select password_hash, customer_id from CUSTOMER where name = :login");
     query.bindValue(":login", entered_login);
@@ -54,6 +60,7 @@ void login::on_pushButton_Ok_clicked()
         mainW->centralWidget()->setVisible(true);
         mainW->dbget_Book();
         mainW->setUsername(ui->lineEdit_login->text());
+        mainW->update_wallet();
 
     } else ui->label_3->setVisible(true);
 }
