@@ -19,6 +19,15 @@ UserSetting::UserSetting(QWidget *parent, int customer_id) :
     current_customer_id(customer_id)
 {
     ui->setupUi(this);
+    QSqlDatabase::database().open();
+    QSqlQuery query;
+    query.prepare("select customer.name from customer where customer_id = :id");
+    query.bindValue(":id", current_customer_id);
+    qDebug()<<"\nProfile exec: "<<query.exec();
+    qDebug()<<query.lastError();
+    query.next();
+    ui->label_accountName->setText(query.value(0).toString());
+    QSqlDatabase::database().close();
     update_wallet();
 }
 

@@ -1,4 +1,5 @@
 #define BOOKS_CLICKABLE_COLUMN 4
+#define BUNDLES_CLICKABLE_COLUMN 4
 #define CART_CLICKABLE_COLUMN 4
 
 #include "mainwindow.h"
@@ -108,12 +109,14 @@ void MainWindow::dbget_Book() {
                         ") asdf"
                   ") foo where Num>:lowvalue and Num<:highvalue");
 
-    query.bindValue(":lowvalue", 0);
-    query.bindValue(":highvalue", 10);
+    query.bindValue(":lowvalue", current_book_page*10);
+    query.bindValue(":highvalue", 9 + current_book_page*10);
     bool qOk = query.exec();
     qDebug()<<"main Query - "<<qOk;
     qDebug()<<"Last error"<< query.lastError();
     booksModel->setQuery(query);
+    max_book_pages = booksModel->rowCount() / 10;
+    ui->label_page_count->setText(QString("Page %1 out of %2").arg(1).arg(max_book_pages + 1));
     booksModel->setHeaderData( 0, Qt::Horizontal, QObject::tr("Title") );
     booksModel->setHeaderData( 1, Qt::Horizontal, QObject::tr("Author") );
     booksModel->setHeaderData( 2, Qt::Horizontal, QObject::tr("Price") );
@@ -283,11 +286,36 @@ void MainWindow::on_tableView_Books_clicked(const QModelIndex &index)
         add_book_to_cart(index.row());
 }
 
+void MainWindow::update_tableView_Books()
+{
+    openDB();
+    QSqlQuery query;
+    query.prepare("select title, new_name, price, ISBN, 'Add to cart' from"
+                  "("
+                    "select row_number() over(order by title) NUM,  title, new_name, price, ISBN, 'Add to cart' from"
+                    "("
+                        "select title, wm_concat(a.name) as new_name, price, b.ISBN, 'Add to cart'"
+                        "from BOOK b INNER JOIN BOOK_S_AUTHOR ba on b.ISBN = ba.ISBN INNER JOIN AUTHOR a on ba.author_id = a.author_id group by title, price, b.ISBN"
+                        ") asdf"
+                  ") foo where Num>:lowvalue and Num<:highvalue");
+
+    query.bindValue(":lowvalue", current_book_page*10);
+    query.bindValue(":highvalue", 10 + current_book_page*10);
+    query.exec();
+    booksModel->setQuery(query);
+    booksModel->setHeaderData( 0, Qt::Horizontal, QObject::tr("Title") );
+    booksModel->setHeaderData( 1, Qt::Horizontal, QObject::tr("Author") );
+    booksModel->setHeaderData( 2, Qt::Horizontal, QObject::tr("Price") );
+    booksModel->setHeaderData( 3, Qt::Horizontal, QObject::tr("Isbn") );
+    booksModel->setHeaderData( BOOKS_CLICKABLE_COLUMN, Qt::Horizontal, QObject::tr("") );
+    closeDB();
+}
+
 void MainWindow::update_tableView_Bundles()
 {
     openDB();
     QSqlQuery query;
-    query.prepare("select name, ttl, trunc(prc,2), 'Add to cart' "
+    query.prepare("select name, ttl, asd1.bundle_id, trunc(prc,2), 'Add to cart' "
                   "from "
                   "( "
                     "select bundle.name, wm_concat(book.title) ttl, bundle.bundle_id "
@@ -309,8 +337,9 @@ void MainWindow::update_tableView_Bundles()
     qDebug()<<"rows found: "<<bundlesModel->rowCount()<<"\n";
     bundlesModel->setHeaderData( 0, Qt::Horizontal, QObject::tr("Bundle"));
     bundlesModel->setHeaderData( 1, Qt::Horizontal, QObject::tr("Books in bundle"));
-    bundlesModel->setHeaderData( 2, Qt::Horizontal, QObject::tr("Price"));
-    bundlesModel->setHeaderData( 3, Qt::Horizontal, QObject::tr(""));
+    bundlesModel->setHeaderData( 2, Qt::Horizontal, QObject::tr("Bundle ID"));
+    bundlesModel->setHeaderData( 3, Qt::Horizontal, QObject::tr("Price"));
+    bundlesModel->setHeaderData( 4, Qt::Horizontal, QObject::tr(""));
     closeDB();
 }
 
@@ -339,6 +368,7 @@ void MainWindow::update_tableView_Cart()
     qDebug()<<"TableView updated: "<<query.exec();
     qDebug()<<query.lastError();
     cartModel->setQuery(query);
+    ui->label_page_count->setText(QString("Page %1 out of %2").arg(current_book_page + 1).arg(max_book_pages + 1));
     cartModel->setHeaderData( 0, Qt::Horizontal, QObject::tr("Title") );
     cartModel->setHeaderData( 1, Qt::Horizontal, QObject::tr("Author") );
     cartModel->setHeaderData( 2, Qt::Horizontal, QObject::tr("ISBN") );
@@ -356,7 +386,7 @@ void MainWindow::update_tableView_History()
                     "join book_s_author on book.isbn = book_s_author.isbn "
                       "join author on author.author_id = book_s_author.author_id "
                   "where h.customer_id = :cust_id "
-                  "group by title, h.isbn, h.price, h.purchasing_date");
+                  "group by title, h.isbn, h.price, h.purchasing_date order by h.purchasing_date desc");
     query.bindValue(":cust_id", current_customer_ID);
     qDebug()<<"update HoP: "<<query.exec();
     qDebug()<<query.lastError();
@@ -402,4 +432,43 @@ void MainWindow::on_tableView_Cart_clicked(const QModelIndex &index)
 {
     if (index.column() == CART_CLICKABLE_COLUMN)
         delete_book_from_cart(index.row());
+}
+
+void MainWindow::add_bundle_to_cart(int row_index)
+{
+    openDB();
+    QSqlQuery query;
+    query.prepare("call ADD_BUNDLE_TO_CART(:customer_id, :bundle_id)");
+    QModelIndex index = bundlesModel->index(row_index, 2);
+    QString value_bundle_id = bundlesModel->itemData(index)[0].toString();
+    query.bindValue(":customer_id", current_customer_ID);
+    query.bindValue(":bundle_id", value_bundle_id);
+    qDebug()<<"add bundle to cart: "<<query.exec();
+    qDebug()<<query.lastError();
+    closeDB();
+    update_tableView_Cart();
+}
+
+void MainWindow::on_tableView_Bundles_clicked(const QModelIndex &index)
+{
+    if (index.column() == BUNDLES_CLICKABLE_COLUMN)
+        add_bundle_to_cart(index.row());
+}
+
+void MainWindow::on_pushButton_Prev_clicked()
+{
+    if (current_book_page > 0)
+    {
+        --current_book_page;
+        update_tableView_Books();
+    }
+}
+
+void MainWindow::on_pushButton_Next_clicked()
+{
+    if (current_book_page < max_book_pages)
+    {
+        ++current_book_page;
+        update_tableView_Books();
+    }
 }

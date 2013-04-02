@@ -41,11 +41,14 @@ class MainWindow : public QMainWindow
     unsigned databasePort;
     void populate_books();
     void add_book_to_cart(int row_index);
+    void add_bundle_to_cart(int row_index);
     void delete_book_from_cart(int row_index);
     void clear_Cart();
     int current_customer_ID;
     int current_book_page;
+    int max_book_pages;
 public:
+    void update_tableView_Books();
     void update_tableView_Bundles();
     void update_tableView_Cart();
     void update_tableView_History();
@@ -80,6 +83,12 @@ private slots:
     void on_tableView_Books_clicked(const QModelIndex &index);
 
     void on_tableView_Cart_clicked(const QModelIndex &index);
+
+    void on_tableView_Bundles_clicked(const QModelIndex &index);
+
+    void on_pushButton_Prev_clicked();
+
+    void on_pushButton_Next_clicked();
 
 private:
     Ui::MainWindow *ui;

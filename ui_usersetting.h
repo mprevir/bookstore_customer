@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'usersetting.ui'
 **
-** Created: Thu 28. Mar 20:42:36 2013
+** Created: Tue 2. Apr 21:44:12 2013
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -74,7 +74,7 @@ public:
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">user</p></body></html>", 0, QApplication::UnicodeUTF8));
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">txt</p></body></html>", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("UserSetting", "Wallet:", 0, QApplication::UnicodeUTF8));
         label_Wallet->setText(QString());
         pushButton->setText(QApplication::translate("UserSetting", "Add funds", 0, QApplication::UnicodeUTF8));

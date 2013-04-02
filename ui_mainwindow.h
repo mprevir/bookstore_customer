@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Tue 2. Apr 21:10:41 2013
+** Created: Tue 2. Apr 23:16:57 2013
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -36,6 +36,7 @@ public:
     QTableView *tableView_Books;
     QPushButton *pushButton_Prev;
     QPushButton *pushButton_Next;
+    QLabel *label_page_count;
     QWidget *tab_2;
     QTableView *tableView_Bundles;
     QWidget *tab_3;
@@ -78,6 +79,9 @@ public:
         pushButton_Next = new QPushButton(tab);
         pushButton_Next->setObjectName(QString::fromUtf8("pushButton_Next"));
         pushButton_Next->setGeometry(QRect(560, 320, 75, 23));
+        label_page_count = new QLabel(tab);
+        label_page_count->setObjectName(QString::fromUtf8("label_page_count"));
+        label_page_count->setGeometry(QRect(250, 330, 111, 16));
         tabWidget->addTab(tab, QString());
         tab_2 = new QWidget();
         tab_2->setObjectName(QString::fromUtf8("tab_2"));
@@ -129,7 +133,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(1);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -142,6 +146,7 @@ public:
         label_2->setText(QApplication::translate("MainWindow", "$0.00", 0, QApplication::UnicodeUTF8));
         pushButton_Prev->setText(QApplication::translate("MainWindow", "<<", 0, QApplication::UnicodeUTF8));
         pushButton_Next->setText(QApplication::translate("MainWindow", ">>", 0, QApplication::UnicodeUTF8));
+        label_page_count->setText(QApplication::translate("MainWindow", "Page n out of N", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "Books", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "Bundles", 0, QApplication::UnicodeUTF8));
         pushButton_2->setText(QApplication::translate("MainWindow", "Clear Cart", 0, QApplication::UnicodeUTF8));
