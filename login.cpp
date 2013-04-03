@@ -42,6 +42,7 @@ void login::on_pushButton_Ok_clicked()
     query.prepare("select password_hash, customer_id from CUSTOMER where name = :login");
     query.bindValue(":login", entered_login);
     qDebug()<<"query exec"<<query.exec();
+    qDebug()<<query.lastError();
     qDebug()<<"query.next - "<<query.next();
     if (query.isNull(0))
     {

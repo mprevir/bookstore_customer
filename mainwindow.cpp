@@ -139,7 +139,6 @@ bool MainWindow::openDB()
     if (!opened_success)
         QMessageBox::information(0, "Connection problem", "Cannot connect to server.\n"
                                      "Check your connection settings (settings.ini - located in program folder)");
-
     return opened_success;
 }
 
@@ -325,14 +324,14 @@ void MainWindow::update_tableView_Bundles()
                   "( "
                     "select bundle.name, wm_concat(book.title) ttl, bundle.bundle_id "
                     "from bundle, bundledbook, book "
-                    "where book.isbn = bundledbook.isbn "
+                    "where book.isbn = bundledbook.isbn and bundle.bundle_id = bundledbook.bundle_id "
                     "group by bundle.name, bundle.bundle_id "
                   ") asd1 "
                   "join "
                   "( "
                     "select sum((1-discount)*price) prc, bundle.bundle_id "
                     "from bundle, bundledbook, book "
-                    "where book.isbn = bundledbook.isbn and bundle.deleted != 1 "
+                    "where book.isbn = bundledbook.isbn and bundle.deleted != 1 and bundle.bundle_id = bundledbook.bundle_id "
                     "group by bundle.bundle_id "
                   ") asd2 "
                   "on asd1.bundle_id = asd2.bundle_id");
