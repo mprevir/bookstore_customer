@@ -61,6 +61,10 @@ void login::on_pushButton_Ok_clicked()
         mainW->dbget_Book();
         mainW->setUsername(ui->lineEdit_login->text());
         mainW->update_wallet();
+//        mainW->update_tableView_Books();
+        mainW->update_tableView_Bundles();
+        mainW->update_tableView_Cart();
+        mainW->update_tableView_History();
 
     } else ui->label_3->setVisible(true);
 }

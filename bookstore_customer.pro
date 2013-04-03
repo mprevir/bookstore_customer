@@ -21,16 +21,19 @@ SOURCES += main.cpp\
     login.cpp \
     usersetting.cpp \
     registerdialog.cpp \
-    bundleinfo.cpp
+    bundleinfo.cpp \
+    passwordchangedialog.cpp
 
 HEADERS  += mainwindow.h \
     login.h \
     usersetting.h \
     registerdialog.h \
-    bundleinfo.h
+    bundleinfo.h \
+    passwordchangedialog.h
 
 FORMS    += mainwindow.ui \
     login.ui \
     usersetting.ui \
     registerdialog.ui \
-    bundleinfo.ui
+    bundleinfo.ui \
+    passwordchangedialog.ui

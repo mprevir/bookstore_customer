@@ -28,6 +28,14 @@ BundleInfo::BundleInfo(int b_id, QWidget *parent) :
     ui->tableBundle_items->setModel(bundleModel);
 
     bundle_id = b_id;
+    QSqlDatabase::database().open();
+    QSqlQuery query;
+    query.prepare("select name from bundle where bundle_id = :b_id");
+    query.bindValue(":b_id", bundle_id);
+    query.exec();
+    query.next();
+    ui->label->setText(query.value(0).toString());
+    QSqlDatabase::database().close();
     update_tableBundle_items();
 }
 

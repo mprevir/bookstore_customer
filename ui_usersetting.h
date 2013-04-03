@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'usersetting.ui'
 **
-** Created: Tue 2. Apr 21:44:12 2013
+** Created: Wed 3. Apr 22:07:55 2013
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -28,7 +28,7 @@ public:
     QLabel *label;
     QLabel *label_Wallet;
     QPushButton *pushButton;
-    QPushButton *pushButton_2;
+    QPushButton *pushChange_pswd;
     QPushButton *logoutButton;
     QPushButton *closeButton;
 
@@ -52,9 +52,9 @@ public:
         pushButton = new QPushButton(UserSetting);
         pushButton->setObjectName(QString::fromUtf8("pushButton"));
         pushButton->setGeometry(QRect(150, 90, 75, 23));
-        pushButton_2 = new QPushButton(UserSetting);
-        pushButton_2->setObjectName(QString::fromUtf8("pushButton_2"));
-        pushButton_2->setGeometry(QRect(40, 40, 121, 23));
+        pushChange_pswd = new QPushButton(UserSetting);
+        pushChange_pswd->setObjectName(QString::fromUtf8("pushChange_pswd"));
+        pushChange_pswd->setGeometry(QRect(40, 40, 121, 23));
         logoutButton = new QPushButton(UserSetting);
         logoutButton->setObjectName(QString::fromUtf8("logoutButton"));
         logoutButton->setGeometry(QRect(50, 270, 75, 23));
@@ -78,7 +78,7 @@ public:
         label->setText(QApplication::translate("UserSetting", "Wallet:", 0, QApplication::UnicodeUTF8));
         label_Wallet->setText(QString());
         pushButton->setText(QApplication::translate("UserSetting", "Add funds", 0, QApplication::UnicodeUTF8));
-        pushButton_2->setText(QApplication::translate("UserSetting", "Change Password", 0, QApplication::UnicodeUTF8));
+        pushChange_pswd->setText(QApplication::translate("UserSetting", "Change Password", 0, QApplication::UnicodeUTF8));
         logoutButton->setText(QApplication::translate("UserSetting", "LogOut", 0, QApplication::UnicodeUTF8));
         closeButton->setText(QApplication::translate("UserSetting", "Close", 0, QApplication::UnicodeUTF8));
     } // retranslateUi

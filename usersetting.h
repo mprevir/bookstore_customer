@@ -28,6 +28,8 @@ private slots:
 
     void on_pushButton_clicked();
 
+    void on_pushChange_pswd_clicked();
+
 private:
     int exit_status; //0 - closed, 1 - loged out
     Ui::UserSetting *ui;

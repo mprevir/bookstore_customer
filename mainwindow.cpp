@@ -67,9 +67,9 @@ MainWindow::MainWindow(QWidget *parent) :
     db.setPort(databasePort);
 
     login_dialog();
-    update_tableView_Bundles();
-    update_tableView_Cart();
-    update_tableView_History();
+//    update_tableView_Bundles();
+//    update_tableView_Cart();
+//    update_tableView_History();
 }
 
 void MainWindow::login_dialog()
@@ -328,7 +328,7 @@ void MainWindow::update_tableView_Bundles()
                   "( "
                     "select sum((1-discount)*price) prc, bundle.bundle_id "
                     "from bundle, bundledbook, book "
-                    "where book.isbn = bundledbook.isbn "
+                    "where book.isbn = bundledbook.isbn and bundle.deleted != 1 "
                     "group by bundle.bundle_id "
                   ") asd2 "
                   "on asd1.bundle_id = asd2.bundle_id");
@@ -355,8 +355,9 @@ void MainWindow::update_tableView_Cart()
                   "from cart join book on cart.isbn = book.isbn "
                     "join book_s_author ba on  ba.isbn = book.isbn "
                         "join author on ba.author_ID = author.AUTHOR_ID "
+                  "where cart.customer_id = :cust_id "
                   "group by title, isbn, cart.price");
-
+    query.bindValue(":cust_id", current_customer_ID);
 /*    query.prepare("select asd1.title, asd1.auth_name, asd1.isbn, nvl(asd2.discount, asd1.price), 'Delete' "
                   "from (select title, wm_concat(author.name) auth_name, book.isbn, price, cart.bundle_id "
                                   "from cart join book on cart.isbn = book.isbn "
@@ -462,6 +463,7 @@ void MainWindow::on_pushButton_Prev_clicked()
     if (current_book_page > 0)
     {
         --current_book_page;
+        ui->label_page_count->setText(QString("Page %1 out of %2").arg(1).arg(max_book_pages + 1));
         update_tableView_Books();
     }
 }
@@ -471,6 +473,7 @@ void MainWindow::on_pushButton_Next_clicked()
     if (current_book_page < max_book_pages)
     {
         ++current_book_page;
+        ui->label_page_count->setText(QString("Page %1 out of %2").arg(1).arg(max_book_pages + 1));
         update_tableView_Books();
     }
 }

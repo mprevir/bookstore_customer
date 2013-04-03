@@ -4,6 +4,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QDebug>
+#include "passwordchangedialog.h"
 
 UserSetting::UserSetting(QWidget *parent) :
     QDialog(parent),
@@ -73,4 +74,10 @@ void UserSetting::on_pushButton_clicked()
     qDebug()<<"Query exec: "<<query.exec();
     QSqlDatabase::database().close();
     update_wallet();
+}
+void UserSetting::on_pushChange_pswd_clicked()
+{
+    PasswordChangeDialog pswdChange;
+    pswdChange.customer_id = current_customer_id;
+    pswdChange.exec();
 }
