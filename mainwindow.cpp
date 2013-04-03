@@ -135,8 +135,12 @@ bool MainWindow::openDB()
 //        qDebug()<<"database is already opened";
         return true;
     }
+    bool opened_success = QSqlDatabase::database().open();
+    if (!opened_success)
+        QMessageBox::information(0, "Connection problem", "Cannot connect to server.\n"
+                                     "Check your connection settings (settings.ini - located in program folder)");
 
-    return QSqlDatabase::database().open();
+    return opened_success;
 }
 
 void MainWindow::closeDB()

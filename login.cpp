@@ -34,8 +34,8 @@ void login::on_pushButton_Ok_clicked()
     bool connection_established = mainW->openDB();
     if (!connection_established)
     {
-        QMessageBox::information(0, "Connection problem", "Cannot connect to server.\n"
-                                 "Check your connection settings (settings.ini - located in program folder)");
+       /* QMessageBox::information(0, "Connection problem", "Cannot connect to server.\n"
+                                 "Check your connection settings (settings.ini - located in program folder)");*/
         return;
     }
     QSqlQuery query;
