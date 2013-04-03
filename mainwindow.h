@@ -90,6 +90,8 @@ private slots:
 
     void on_pushButton_Next_clicked();
 
+    void on_tableView_Bundles_doubleClicked(const QModelIndex &index);
+
 private:
     Ui::MainWindow *ui;
     QString username;

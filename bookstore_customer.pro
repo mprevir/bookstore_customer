@@ -20,14 +20,17 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     login.cpp \
     usersetting.cpp \
-    registerdialog.cpp
+    registerdialog.cpp \
+    bundleinfo.cpp
 
 HEADERS  += mainwindow.h \
     login.h \
     usersetting.h \
-    registerdialog.h
+    registerdialog.h \
+    bundleinfo.h
 
 FORMS    += mainwindow.ui \
     login.ui \
     usersetting.ui \
-    registerdialog.ui
+    registerdialog.ui \
+    bundleinfo.ui

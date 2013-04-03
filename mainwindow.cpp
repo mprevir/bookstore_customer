@@ -7,6 +7,7 @@
 #include "login.h"
 #include <QDebug>
 #include "usersetting.h"
+#include "bundleinfo.h"
 //#include <QOCIDriver>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -110,7 +111,7 @@ void MainWindow::dbget_Book() {
                   ") foo where Num>:lowvalue and Num<:highvalue");
 
     query.bindValue(":lowvalue", current_book_page*10);
-    query.bindValue(":highvalue", 9 + current_book_page*10);
+    query.bindValue(":highvalue", 10 + current_book_page*10);
     bool qOk = query.exec();
     qDebug()<<"main Query - "<<qOk;
     qDebug()<<"Last error"<< query.lastError();
@@ -171,8 +172,8 @@ void MainWindow::on_pushButton_clicked()   //search
     query.bindValue(":search1", searchCriteria);
     query.bindValue(":search2", searchCriteria);
     query.bindValue(":search3", searchCriteria);
-    query.bindValue(":lowvalue", 0);
-    query.bindValue(":highvalue", 10);
+    query.bindValue(":lowvalue", current_book_page*10);
+    query.bindValue(":highvalue", 10+current_book_page*10);
     qDebug()<<"search query: "<<query.exec();
     qDebug()<<query.lastError();
     booksModel->setQuery(query);
@@ -340,6 +341,7 @@ void MainWindow::update_tableView_Bundles()
     bundlesModel->setHeaderData( 2, Qt::Horizontal, QObject::tr("Bundle ID"));
     bundlesModel->setHeaderData( 3, Qt::Horizontal, QObject::tr("Price"));
     bundlesModel->setHeaderData( 4, Qt::Horizontal, QObject::tr(""));
+    ui->tableView_Bundles->hideColumn(2);
     closeDB();
 }
 
@@ -471,4 +473,18 @@ void MainWindow::on_pushButton_Next_clicked()
         ++current_book_page;
         update_tableView_Books();
     }
+}
+
+
+void MainWindow::on_tableView_Bundles_doubleClicked(const QModelIndex &index)
+{
+    if (index.column() == BUNDLES_CLICKABLE_COLUMN)
+        return;
+    QModelIndex bundle_id_index = bundlesModel->index(index.row(), 2); //index of bundle_id item (column 2)
+    const int bundle_id = bundlesModel->itemData(bundle_id_index)[0].toInt();
+    BundleInfo bundleInfo(bundle_id);
+    int status = bundleInfo.exec();
+    qDebug()<<"\nBundle Info status: "<<status;
+    if (status)
+        add_bundle_to_cart(index.row());
 }
